@@ -1,0 +1,434 @@
+CREATE TABLE Caja (
+	Idcaja INTEGER NOT NULL DEFAULT AUTOINCREMENT,
+	Fecha_Caja TIMESTAMP NULL,
+	Tipo_Caja VARCHAR(50) NULL,
+	Concepto NVARCHAR(190) NULL,
+	De_Para VARCHAR(180) NULL,
+	Nro_Doc CHAR(20) NULL,
+	ImporteCaja REAL NULL,
+	Id_Usu INTEGER NULL,
+	TotalUti REAL NULL,
+	TipoPago VARCHAR(13) NULL,
+	GeneradoPor VARCHAR(15) NULL,
+	EstadoCaja VARCHAR(13) NULL,
+	Total_Dscuentos REAL NOT NULL,
+	ModoCierre VARCHAR(15) NULL,
+	PRIMARY KEY (Idcaja ASC)
+);
+
+CREATE TABLE Categorias (
+	Id_Cat INTEGER NOT NULL DEFAULT AUTOINCREMENT,
+	Categoria NVARCHAR(50) NOT NULL,
+	PRIMARY KEY (Id_Cat ASC)
+);
+
+CREATE TABLE Cierre_Caja (
+	Id_cierre CHAR(10) NOT NULL,
+	Fecha_Cierre TIMESTAMP NOT NULL,
+	Apertura_Caja REAL NOT NULL,
+	Total_Ingreso REAL NULL,
+	TotalEgreso REAL NULL,
+	Id_Usu INTEGER NULL,
+	TodoDeposito REAL NULL,
+	Gananciadeldia REAL NULL,
+	TotalEntregado REAL NULL,
+	SaldoSiguiente REAL NULL,
+	TotalFactura REAL NULL,
+	TotalBoleta REAL NULL,
+	TotalNotaVenta REAL NULL,
+	TotalCreditoCobrado REAL NULL,
+	TotalCreditoEmitido REAL NULL,
+	Estado_cierre VARCHAR(13) NULL,
+	PRIMARY KEY (Id_cierre ASC)
+);
+
+CREATE TABLE Cliente (
+	Id_Cliente CHAR(10) NOT NULL,
+	Razon_Social_Nombres NVARCHAR(250) NULL,
+	DNI CHAR(18) NOT NULL,
+	Direccion NVARCHAR(150) NULL,
+	Telefono CHAR(10) NULL,
+	E_Mail NVARCHAR(150) NULL,
+	Fcha_Ncmnto_Anivsrio TIMESTAMP NULL,
+	Estado_Cli VARCHAR(12) NULL,
+	PRIMARY KEY (Id_Cliente ASC)
+);
+
+CREATE TABLE Cotizacion (
+	Id_Cotiza CHAR(11) NOT NULL,
+	Id_Ped CHAR(11) NOT NULL,
+	FechaCoti TIMESTAMP NULL,
+	Vigencia INTEGER NULL,
+	TotalCotiza REAL NULL,
+	Condiciones VARCHAR(450) NULL,
+	PrecioconIgv CHAR(4) NULL,
+	EstadoCoti VARCHAR(15) NULL,
+	PRIMARY KEY (Id_Cotiza ASC)
+);
+
+CREATE TABLE Credito (
+	IdNotaCred CHAR(11) NOT NULL,
+	Id_Doc CHAR(11) NOT NULL,
+	Fecha_Credito TIMESTAMP NOT NULL,
+	Nom_Cliente VARCHAR(50) NULL,
+	Total_Cre REAL NULL,
+	Saldo_Pdnte REAL NULL,
+	Fecha_Vncimnto DATE NULL,
+	Estado_Cred VARCHAR(13) NOT NULL,
+	PRIMARY KEY (IdNotaCred ASC)
+);
+
+CREATE TABLE DataRerport (
+	iddata INTEGER NOT NULL DEFAULT AUTOINCREMENT,
+	fecha1 VARCHAR(30) NULL,
+	fecha2 VARCHAR(30) NULL,
+	Usuario VARCHAR(40) NULL,
+	TipoConsulta VARCHAR(120) NULL,
+	PRIMARY KEY (iddata ASC)
+);
+
+CREATE TABLE Detalle_Credito (
+	Id_DetCred INTEGER NOT NULL DEFAULT AUTOINCREMENT,
+	IdNotaCred CHAR(11) NOT NULL,
+	A_cuenta REAL NOT NULL,
+	Saldo_Actual REAL NULL,
+	Fecha_Pago TIMESTAMP NULL,
+	TipoPago VARCHAR(50) NULL,
+	Nro_Opera_Coment NVARCHAR(180) NULL,
+	Id_Usu INTEGER NOT NULL,
+	PRIMARY KEY (Id_DetCred ASC)
+);
+
+CREATE TABLE Detalle_DocumCompra (
+	Id_DocComp CHAR(11) NOT NULL,
+	Id_Pro CHAR(20) NOT NULL,
+	PrecioUnit REAL NULL,
+	Cantidad REAL NULL,
+	Importe REAL NULL,
+	preventa REAL NULL
+);
+
+CREATE TABLE Detalle_Kardex (
+	Id_krdx CHAR(11) NOT NULL,
+	Item INTEGER NOT NULL,
+	Fecha_Krdx TIMESTAMP NOT NULL,
+	Doc_Soporte NCHAR(20) NULL,
+	Det_Operacion VARCHAR(180) NULL,
+	Cantidad_In REAL NULL,
+	Precio_In REAL NULL,
+	Total_In REAL NULL,
+	Cantidad_Out REAL NULL,
+	Precio_Out REAL NULL,
+	Total_Out REAL NULL,
+	Cantidad_Saldo REAL NULL,
+	Promedio REAL NULL,
+	Costo_Total_Saldo REAL NULL,
+	Id_Usu INTEGER NULL,
+	Tipo_operacion VARCHAR(17) NULL,
+	Cant_Difncial VARCHAR(10) NULL,
+	ImportDiferen REAL NULL
+);
+
+CREATE TABLE Detalle_Pedido (
+	id_Ped CHAR(11) NOT NULL,
+	Id_Pro CHAR(20) NOT NULL,
+	Precio REAL NULL,
+	Cantidad REAL NULL,
+	Importe REAL NULL,
+	Utilidad_Unit REAL NULL,
+	TotalUtilidad REAL NULL,
+	DescuentoDet REAL NULL  -- Corrected trailing comma from original
+);
+
+CREATE TABLE Detalle_Temporal (
+	codTem NCHAR(12) NOT NULL,
+	CodPro CHAR(11) NULL,
+	cantidad NCHAR(20) NULL,
+	Producto VARCHAR(250) NULL,
+	Pre_Unt VARCHAR(50) NULL,
+	ImporteT VARCHAR(50) NULL
+);
+
+CREATE TABLE Documento (
+	id_Doc CHAR(11) NOT NULL,
+	id_Ped CHAR(11) NOT NULL,
+	Id_Tipo INTEGER NOT NULL,
+	Fecha_Emi TIMESTAMP NULL,
+	ImporteDoc REAL NOT NULL,
+	TipoPago VARCHAR(50) NULL,
+	Nro_Operacion NCHAR(20) NULL,
+	Id_Usu INTEGER NOT NULL,
+	TotalGanancia REAL NULL,
+	TotalDscuento REAL NULL,
+	Estado_Doc VARCHAR(13) NULL,
+	PRIMARY KEY (id_Doc ASC)
+);
+
+CREATE TABLE DocumentoCompras (
+	Id_DocComp CHAR(11) NOT NULL,
+	NroFac_Fisico CHAR(20) NOT NULL,
+	SubTotal_ingre REAL NULL,
+	Fecha_Ingre TIMESTAMP NULL,
+	Total_Ingre REAL NOT NULL,
+	id_Usu INTEGER NOT NULL,
+	ModalidadPago VARCHAR(50) NOT NULL,
+	TiempoEspera INTEGER NULL,
+	Fecha_Vencimiento TIMESTAMP NULL,
+	Estado_Ingre VARCHAR(20) NULL,
+	Datos_Adicional NVARCHAR(150) NULL,
+	TipoDoc_Compra VARCHAR(12) NOT NULL,
+	Tiporegistro VARCHAR(15) NULL,
+	LugarSalida VARCHAR(250) NULL,
+	TipoProceso VARCHAR(15) NULL,
+	PRIMARY KEY (Id_DocComp ASC)
+);
+
+CREATE TABLE KardexProducto (
+	Id_krdx CHAR(11) NOT NULL,
+	Id_Pro CHAR(20) NOT NULL,
+	FechaCre DATE NULL,
+	EstadoKrdx VARCHAR(12) NULL,
+	PRIMARY KEY (Id_krdx ASC)
+);
+
+CREATE TABLE Marcas (
+	Id_Marca INTEGER NOT NULL DEFAULT AUTOINCREMENT,
+	Marca NVARCHAR(50) NOT NULL,
+	PRIMARY KEY (Id_Marca ASC)
+);
+
+CREATE TABLE Menu_xUsu (
+	Id_menuxusu INTEGER NOT NULL DEFAULT AUTOINCREMENT,
+	Nombre_menu VARCHAR(50) NOT NULL,
+	Id_usu INTEGER NOT NULL,
+	PRIMARY KEY (Id_menuxusu ASC)
+);
+
+CREATE TABLE Miempresa (
+	idrancho INTEGER NOT NULL,
+	nombreRancho VARCHAR(250) NULL,
+	nroRuc CHAR(20) NULL,
+	Direccionran VARCHAR(250) NULL,
+	correo VARCHAR(180) NULL,
+	clavecorreo VARCHAR(20) NULL,
+	clavesol VARCHAR(20) NULL,
+	usuariosol VARCHAR(20) NULL,
+	clavecertificado VARCHAR(20) NULL,
+	obs VARCHAR(240) NULL,
+	PRIMARY KEY (idrancho ASC)
+);
+
+CREATE TABLE Pedido (
+	id_Ped CHAR(11) NOT NULL,
+	Id_Cliente CHAR(10) NOT NULL,
+	Fecha_Ped TIMESTAMP NULL,
+	SubTotal REAL NULL,
+	IgvPed REAL NULL,
+	TotalPed REAL NULL,
+	id_Usu INTEGER NOT NULL,
+	TotalGancia REAL NULL,
+	Total_Dscuento REAL NULL,
+	Estado_Ped VARCHAR(12) NOT NULL,
+	PRIMARY KEY (id_Ped ASC)
+);
+
+CREATE TABLE Productos (
+	Id_Pro CHAR(20) NOT NULL,
+	Descripcion_Larga NVARCHAR(150) NOT NULL,
+	Pre_CompraS REAL NOT NULL,
+	Stock_Actual REAL NOT NULL,
+	Id_Cat INTEGER NOT NULL,
+	Foto VARCHAR(180) NULL,
+	Pre_venta REAL NOT NULL,
+	Frmto_Compra VARCHAR(10) NULL,
+	UtilidadUnit REAL NULL,
+	Valor_porCant REAL NULL,
+	Estado_Pro VARCHAR(15) NULL,
+	Prin_Acti VARCHAR(20) NULL,
+	Laboratorio VARCHAR(20) NULL,
+	Und_Min INTEGER NULL,
+	Und_Max INTEGER NULL,
+	FechaIngreso TIMESTAMP NULL,
+	FechaVncmnto VARCHAR(11) NULL,
+	VentaConReceta CHAR(3) NULL,
+	comisionporcen REAL NULL,
+	PRIMARY KEY (Id_Pro ASC)
+);
+
+CREATE TABLE ProductosSinValor (
+	idPrCon INTEGER NOT NULL DEFAULT AUTOINCREMENT,
+	Id_Pro CHAR(20) NOT NULL,
+	Id_Usu INTEGER NOT NULL,
+	FecharegProd TIMESTAMP NULL,
+	MotivoIngre VARCHAR(15) NULL,
+	PRIMARY KEY (idPrCon ASC)
+);
+
+CREATE TABLE ReporteTotalizado (
+	idTotal INTEGER NOT NULL DEFAULT AUTOINCREMENT,
+	FechaVenta VARCHAR(120) NULL,
+	TotalVenta REAL NULL,
+	totalGastos REAL NULL,
+	PRIMARY KEY (idTotal ASC)
+);
+
+CREATE TABLE Roles (
+	Id_Rol INTEGER NOT NULL,
+	Rol NVARCHAR(50) NULL,
+	PRIMARY KEY (Id_Rol ASC)
+);
+
+CREATE TABLE Temporal (
+	CodTem NCHAR(12) NOT NULL,
+	FechaEmi VARCHAR(20) NULL,
+	cliente VARCHAR(150) NULL,
+	Ruc VARCHAR(50) NULL,
+	Direccion VARCHAR(150) NULL,
+	SubTtal VARCHAR(50) NULL,
+	IgvT VARCHAR(50) NULL,
+	TotalT VARCHAR(50) NULL,
+	TotalDscto VARCHAR(50) NOT NULL,
+	SonT VARCHAR(200) NULL,
+	Vendedor VARCHAR(120) NULL,
+	CodigoQr LONG BINARY NULL,
+	Tipocomprobante VARCHAR(50) NULL,
+	HashCpe VARCHAR(60) NULL,
+	MotivoEmi VARCHAR(60) NULL,
+	TipoPago VARCHAR(20) NULL,
+	DireccionTienda VARCHAR(220) NULL,
+	NombreSucursal VARCHAR(220) NULL,
+	PRIMARY KEY (CodTem ASC)
+);
+
+CREATE TABLE Temporal_ReportKardex (
+	idprod CHAR(20) NOT NULL,
+	NombreProducto VARCHAR(150) NULL,
+	stock REAL NULL,
+	preCompra REAL NULL,
+	Comp_x_Stock REAL NULL,
+	PreVenta REAL NULL,
+	Venta_x_Stock REAL NULL,
+	Utilidad REAL NULL,
+	Utili_x_Stock REAL NULL,
+	obs VARCHAR(50) NULL,
+	PRIMARY KEY (idprod ASC)
+);
+
+CREATE TABLE Tipo_Doc (
+	Id_Tipo INTEGER NOT NULL,
+	Documento NVARCHAR(50) NULL,
+	Serie VARCHAR(4) NULL,
+	Numero NVARCHAR(6) NULL,
+	Estado_TiDoc VARCHAR(12) NULL,
+	PRIMARY KEY (Id_Tipo ASC)
+);
+
+CREATE TABLE Usuarios (
+	Id_Usu INTEGER NOT NULL,
+	Nombres VARCHAR(50) NOT NULL,
+	Apellidos VARCHAR(50) NOT NULL,
+	Usuario VARCHAR(8) NOT NULL,
+	Contraseña VARCHAR(10) NOT NULL,
+	FotoUsu VARCHAR(200) NULL,
+	Fecha_Ncmiento TIMESTAMP NOT NULL,
+	Id_Rol INTEGER NOT NULL,
+	Correo VARCHAR(150) NULL,
+	Estado_Usu VARCHAR(12) NULL,
+	PRIMARY KEY (Id_Usu ASC)
+);
+
+CREATE TABLE ValeCompra (
+	IdVale CHAR(11) NOT NULL,
+	Id_Cliente CHAR(10) NOT NULL,
+	NroDoc CHAR(11) NOT NULL,
+	ImporteVale REAL NULL,
+	DetalleVale VARCHAR(220) NOT NULL,
+	EstadoVale VARCHAR(12) NOT NULL,
+	PRIMARY KEY (IdVale ASC)
+);
+
+/*** AHORA VAMOS A RELACIONAR LAS TABLAS ***/
+ALTER TABLE Caja ADD CONSTRAINT FK_caja_usu FOREIGN KEY(Id_Usu)
+REFERENCES Usuarios (Id_Usu);
+
+ALTER TABLE Cierre_Caja ADD CONSTRAINT FK_cirre_usu FOREIGN KEY(Id_Usu)
+REFERENCES Usuarios (Id_Usu);
+
+ALTER TABLE Cotizacion ADD CONSTRAINT FK_coti_cli FOREIGN KEY(Id_Ped)
+REFERENCES Pedido (id_Ped);
+
+ALTER TABLE Credito ADD CONSTRAINT FK_cre_doc FOREIGN KEY(Id_Doc)
+REFERENCES Documento (id_Doc);
+
+ALTER TABLE Detalle_Credito ADD CONSTRAINT FK_cred_usudet FOREIGN KEY(Id_Usu)
+REFERENCES Usuarios (Id_Usu);
+
+ALTER TABLE Detalle_Credito ADD CONSTRAINT FK_cred_Det FOREIGN KEY(IdNotaCred)
+REFERENCES Credito (IdNotaCred);
+
+ALTER TABLE Detalle_DocumCompra ADD CONSTRAINT FK_detcom FOREIGN KEY(Id_DocComp)
+REFERENCES DocumentoCompras (Id_DocComp);
+
+ALTER TABLE Detalle_DocumCompra ADD CONSTRAINT FK_detcom_prod FOREIGN KEY(Id_Pro)
+REFERENCES Productos (Id_Pro);
+
+ALTER TABLE Detalle_Kardex ADD CONSTRAINT FK_detkar_usu FOREIGN KEY(Id_Usu)
+REFERENCES Usuarios (Id_Usu);
+
+ALTER TABLE Detalle_Kardex ADD CONSTRAINT FK_Kar_det FOREIGN KEY(Id_krdx)
+REFERENCES KardexProducto (Id_krdx);
+
+ALTER TABLE Detalle_Pedido ADD CONSTRAINT FK_det_ped FOREIGN KEY(id_Ped)
+REFERENCES Pedido (id_Ped);
+
+ALTER TABLE Detalle_Pedido ADD CONSTRAINT FK_det_Prd FOREIGN KEY(Id_Pro)
+REFERENCES Productos (Id_Pro);
+
+ALTER TABLE Detalle_Temporal ADD CONSTRAINT FK_tem_Det FOREIGN KEY(codTem)
+REFERENCES Temporal (CodTem);
+
+ALTER TABLE Documento ADD CONSTRAINT FK_doc_ped FOREIGN KEY(id_Ped)
+REFERENCES Pedido (id_Ped);
+
+ALTER TABLE Documento ADD CONSTRAINT FK_doc_tip FOREIGN KEY(Id_Tipo)
+REFERENCES Tipo_Doc (Id_Tipo);
+
+ALTER TABLE Documento ADD CONSTRAINT FK_doc_usux FOREIGN KEY(Id_Usu)
+REFERENCES Usuarios (Id_Usu);
+
+ALTER TABLE DocumentoCompras ADD CONSTRAINT FK_com_usu FOREIGN KEY(id_Usu)
+REFERENCES Usuarios (Id_Usu);
+
+ALTER TABLE KardexProducto ADD CONSTRAINT FK_Kar_Prod FOREIGN KEY(Id_Pro)
+REFERENCES Productos (Id_Pro);
+
+ALTER TABLE Menu_xUsu ADD CONSTRAINT FK_mnu_usu FOREIGN KEY(Id_usu)
+REFERENCES Usuarios (Id_Usu);
+
+-- Note: FK_mnuusu is a duplicate constraint name for the same columns and target as FK_mnu_usu.
+-- In SQL Anywhere (and most databases), constraint names must be unique.
+-- I will assume this was a typo in the original and only create one. If it was intentional for some
+-- SQL Server specific reason, you might need to rename one for SQL Anywhere.
+-- ALTER TABLE Menu_xUsu ADD CONSTRAINT FK_mnuusu FOREIGN KEY(Id_usu)
+-- REFERENCES Usuarios (Id_Usu);
+
+ALTER TABLE Pedido ADD CONSTRAINT FK_Ped_cli FOREIGN KEY(Id_Cliente)
+REFERENCES Cliente (Id_Cliente);
+
+ALTER TABLE Pedido ADD CONSTRAINT FK_Ped_usu FOREIGN KEY(id_Usu)
+REFERENCES Usuarios (Id_Usu);
+
+ALTER TABLE Productos ADD CONSTRAINT FK_Prod_Cat FOREIGN KEY(Id_Cat)
+REFERENCES Categorias (Id_Cat);
+
+ALTER TABLE ProductosSinValor ADD CONSTRAINT FK_pro_cons FOREIGN KEY(Id_Pro)
+REFERENCES Productos (Id_Pro);
+
+ALTER TABLE ProductosSinValor ADD CONSTRAINT FK_prodcon_usu FOREIGN KEY(Id_Usu)
+REFERENCES Usuarios (Id_Usu);
+
+ALTER TABLE Usuarios ADD CONSTRAINT FK_rol_usu FOREIGN KEY(Id_Rol)
+REFERENCES Roles (Id_Rol);
+
+ALTER TABLE ValeCompra ADD CONSTRAINT FK_val_cli FOREIGN KEY(Id_Cliente)
+REFERENCES Cliente (Id_Cliente);
