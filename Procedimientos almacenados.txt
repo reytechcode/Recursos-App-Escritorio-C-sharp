@@ -1,0 +1,193 @@
+-- CATEGORÍA:
+
+-- Insert:
+CREATE PROCEDURE SP_Registrar_Categoria (
+    nombrecateg VARCHAR(50)
+)
+BEGIN
+    INSERT INTO Categorias (Categoria) VALUES (nombrecateg);
+END;
+
+-- Update:
+CREATE PROCEDURE SP_Editar_Categoria (
+    idCat INTEGER,
+    nombrecateg VARCHAR(50)
+)
+BEGIN
+    UPDATE Categorias SET
+        Categoria = nombrecateg
+    WHERE
+        Id_Cat = idCat;
+END;
+
+-- Consulta:
+CREATE PROCEDURE sp_Listar_Todas_Categ()
+BEGIN
+    SELECT * FROM Categorias
+    ORDER BY Categoria ASC;
+END;
+
+
+
+
+-- PPRODUCTO:
+
+CREATE PROCEDURE Sp_registrar_Producto (
+    idpro CHAR(20),
+    descripcion VARCHAR(150),
+    Pre_compra REAL,
+    StockActual REAL,
+    idCat INT,
+    Foto VARCHAR(180),
+    Pre_Venta REAL,
+    Frmto_Compra VARCHAR(10),
+    Utilidad REAL,
+    ValorporProd REAL,
+    Prin_Activo VARCHAR(20),
+    Laboratorio VARCHAR(20),
+    undMin INT,
+    undMax INT,
+    fechaVncmnto VARCHAR(11),
+    Ventaconreceta CHAR(3)
+    -- El último parámetro no debe llevar coma
+)
+BEGIN
+    INSERT INTO Productos (
+        Id_Pro,
+        Descripcion_Larga,
+        Pre_CompraS,
+        Stock_Actual,
+        Id_Cat,
+        Foto,
+        Pre_venta,
+        Frmto_Compra,
+        UtilidadUnit,
+        Valor_porCant,
+        Estado_Pro,
+        Prin_Acti,
+        Laboratorio,
+        Und_Min,
+        Und_Max,
+        FechaIngreso,
+        FechaVncmnto,
+        VentaConReceta,
+        comisionporcen
+    )
+    VALUES (
+        idpro,
+        descripcion,
+        Pre_compra,
+        StockActual,
+        idCat,
+        Foto,
+        Pre_Venta,
+        Frmto_Compra,
+        Utilidad,
+        ValorporProd,
+        'Activo',      -- Valor fijo para el estado
+        Prin_Activo,
+        Laboratorio,
+        undMin,
+        undMax,
+        NOW(),         -- Función para obtener la fecha y hora actual
+        fechaVncmnto,
+        Ventaconreceta,
+        0              -- Valor fijo para la comisión
+    );
+END;
+
+
+
+CREATE PROCEDURE Sp_Editar_Producto (
+    -- Parámetro clave para identificar el producto a editar
+    idpro CHAR(20),
+
+    -- Parámetros con los nuevos valores
+    descripcion VARCHAR(150),
+    Pre_compra REAL,
+    idCat INT,
+    Foto VARCHAR(180),
+    Pre_Venta REAL,
+    Frmto_Compra VARCHAR(10),
+    Prin_Activo VARCHAR(20),
+    Laboratorio VARCHAR(20),
+    undMin INT,
+    undMax INT,
+    fechaVncmnto VARCHAR(11),
+    Ventaconreceta CHAR(3) 
+)
+BEGIN
+    UPDATE Productos
+    SET
+        Descripcion_Larga = descripcion,
+        Pre_CompraS = Pre_compra,
+        Id_Cat = idCat,
+        Foto = Foto,
+        Pre_venta = Pre_Venta,
+        Frmto_Compra = Frmto_Compra,
+        Prin_Acti = Prin_Activo,
+        Laboratorio = Laboratorio,
+        Und_Min = undMin,
+        Und_Max = undMax,
+        FechaVncmnto = fechaVncmnto,
+        VentaConReceta = Ventaconreceta
+    WHERE
+        Id_Pro = idpro;
+END;
+
+
+--VISTA
+
+CREATE VIEW v_Producto_Categoria AS
+SELECT
+    P.Id_Pro,
+    P.Descripcion_Larga,
+    P.Pre_CompraS,
+    P.Stock_Actual,
+    P.Id_Cat, -- Se selecciona solo una vez, ya que es la clave de la unión
+    P.Foto,
+    P.Pre_venta,
+    P.Frmto_Compra,
+    P.UtilidadUnit,
+    P.Valor_porCant,
+    P.Estado_Pro,
+    P.Prin_Acti,
+    P.Laboratorio,
+    P.Und_Min,
+    P.Und_Max,
+    P.FechaIngreso,
+    P.FechaVncmnto,
+    P.VentaConReceta,
+    C.Categoria -- Se añade el nombre de la categoría desde la tabla de Categorías
+FROM
+    Productos P
+JOIN
+    Categorias C ON P.Id_Cat = C.Id_Cat;
+END;
+
+
+
+--LISTAR LOS PRODUCTOS:
+CREATE PROCEDURE sp_Listar_Todos_Productos()
+BEGIN
+    SELECT *
+    FROM v_Producto_Categoria
+    ORDER BY Descripcion_Larga ASC;
+END;
+
+
+
+--BUSCAR PRODUCTO
+CREATE PROCEDURE Sp_Buscador_Produtos_porValor(
+    valor VARCHAR(150)
+)
+BEGIN
+    SELECT *
+    FROM v_Producto_Categoria
+    WHERE
+        Id_Pro = valor OR
+        Descripcion_Larga LIKE '%' || valor || '%' OR
+        Prin_Acti LIKE '%' || valor || '%' OR
+        Laboratorio LIKE '%' || valor || '%';
+END;
+
