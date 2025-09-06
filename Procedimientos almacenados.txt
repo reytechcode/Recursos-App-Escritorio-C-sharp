@@ -163,7 +163,7 @@ FROM
     Productos P
 JOIN
     Categorias C ON P.Id_Cat = C.Id_Cat;
-END;
+
 
 
 
